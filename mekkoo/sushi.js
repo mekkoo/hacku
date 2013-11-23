@@ -5,41 +5,41 @@
 //サルでもわかるLeap
 //http://syslog.shimy.net/?p=619
 
-var sushiCnt = "";
-var handLeft = "";
-var handRight = "";
-var outCnt = "";
+var handLeft = 0;
+var handRight = 0;
+var cnt = 0;
+var flag = false;
 
-//寿司注文関数
-function sushiAct(){
-	console.log('sushiAct!');
-}
-
-function vectorToString(vector, digits) {
-	if (typeof digits === "undefined") {
-		digits = 1;
-	}
-	return "(" + vector[0].toFixed(digits) + ", "// toFixed(digits)は小数点digits桁以下を切り捨てする処理
-			+ vector[1].toFixed(digits) + ", "
-			+ vector[2].toFixed(digits) + ")";
-}
-
-//HTMLの#consoleにログを出力する関数
+//HTMLの#consoleにログを出力する用
 function htmlOutput(dataLeft, dataRight){
 	$("#console_left").text("left: "+dataLeft+" ");
 	$("#console_right").text("right: "+dataRight+" ");
 }
 
-function handRightInit(yPosition){
-	var init = $("#init");
-	switch (yPosition){
-		case "out":
-			outCnt++;
-			init.addClass("hide");
-			break;
-		default:
-			init.removeClass("hide").text(yPosition);
-			break;
+//寿司注文関数
+function sushiAct(){
+	alert("sushiAct!");
+}
+
+//にぎりカウントアップ にぎり回数が3に達するとsushiAct()発火
+function nigiriCntup(yPosition){
+	var nigiriWatcher = $("#nigiri_watcher");
+	var cntConsole = $("#cnt_console");
+	if(yPosition >= 250){ //yが250以上の場合
+		if(!flag) { //すでに250以上の場合、カウント処理をスキップ
+			flag = true; //カウント中断のフラグを建てる
+			cnt++; //カウントアップ
+			cntConsole.text(cnt);
+			if(cnt  === 3){ //3に達するとsushiAct()発火
+				sushiAct(); //寿司注文関数
+			}
+		}
+		init.removeClass("hide").text(yPosition);
+	}else if(yPosition <= 250){ //yが250以下の場合
+		if(flag) {
+			flag = false;
+		}
+		init.addClass("hide");
 	}
 }
 
@@ -91,13 +91,7 @@ controller.on('animationFrame', function(frame){
 		);
 
 		htmlOutput(parseInt(handLeft.palmPosition[1]), parseInt(handRight.palmPosition[1]));
-
-		if(parseInt(handRight.palmPosition[1]) >= 250){
-			handRightInit(parseInt(handRight.palmPosition[1]));
-		}else{
-			handRightInit("out");
-		}
-
+		nigiriCntup(parseInt(handRight.palmPosition[1]));
 	}
 
 });
