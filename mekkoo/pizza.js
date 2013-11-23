@@ -14,7 +14,8 @@ function pizzaAct(){
 	console.log('pizzaAct!');
 }
 
-Leap.loop(function(frame){
+var controller = new Leap.Controller({enableGestures: true});
+controller.loop(function(frame){
 	//ジェスチャーにまつわる情報を格納する変数
 	var gestureString = "";
 
