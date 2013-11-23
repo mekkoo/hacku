@@ -41,11 +41,12 @@ controller.loop(function(frame){
 						gestureString += "pizzaCnt:" + pizzaCnt;
 						//100回ごとにpizzaAct関数を起動
 						if (pizzaCnt % 100 === 0) pizzaAct();
+						console.log(gestureString);
 					break;
 				default:
 					gestureString += "unkown gesture type";
 			}
-			console.log(gestureString);
+			// console.log(gestureString);
 		}
 	}
 
