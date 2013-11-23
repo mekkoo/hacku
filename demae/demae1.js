@@ -126,4 +126,20 @@ new funcs([
 
     }
 
+    function() {
+ page.open('https://demae-can.com/shop/menu/searchArea/1005588/'); 
+        console.log('でまえ', page.url);
+
+        console.log(page.title);
+
+        setTimeout(function() {
+
+            page.render('step4.png');
+
+            phantom.exit();
+
+        }, 200);
+
+    }
+
 ]).next();
