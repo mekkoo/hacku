@@ -1,5 +1,12 @@
+var pizzaCnt = "";
+
+function pizzaAct(){
+	console.log('pizzaAct!');
+}
+
 Leap.loop(function(frame){
 	var gestureString = "";
+
 	if (frame.gestures.length > 0) {
 		for (var i = 0; i < frame.gestures.length; i++) {
 			var gesture = frame.gestures[i];
@@ -12,26 +19,29 @@ Leap.loop(function(frame){
 
 			switch (gesture.type) {
 				case "circle":
-					gestureString += "center: " + vectorToString(gesture.center) + " mm, "
-							+ "normal: " + vectorToString(gesture.normal, 2) + ", "
-							+ "radius: " + gesture.radius.toFixed(1) + " mm, "
-							+ "progress: " + gesture.progress.toFixed(2) + " rotations";
+//					gestureString += "center: " + vectorToString(gesture.center) + " mm, "
+//							+ "normal: " + vectorToString(gesture.normal, 2) + ", "
+//							+ "radius: " + gesture.radius.toFixed(1) + " mm, "
+//							+ "progress: " + gesture.progress.toFixed(2) + " rotations";
+						pizzaCnt++;
+						gestureString += "pizzaCnt:" + pizzaCnt;
+						if (pizzaCnt % 100 === 0) pizzaAct();
 					break;
-				case "swipe":
-					gestureString += "start position: " + vectorToString(gesture.startPosition) + " mm, "
-							+ "current position: " + vectorToString(gesture.position) + " mm, "
-							+ "direction: " + vectorToString(gesture.direction, 2) + ", "
-							+ "speed: " + gesture.speed.toFixed(1) + " mm/s";
-					break;
-				case "screenTap":
-				case "keyTap":
-					gestureString += "position: " + vectorToString(gesture.position) + " mm, "
-							+ "direction: " + vectorToString(gesture.direction, 2);
-					break;
+//				case "swipe":
+//					gestureString += "start position: " + vectorToString(gesture.startPosition) + " mm, "
+//							+ "current position: " + vectorToString(gesture.position) + " mm, "
+//							+ "direction: " + vectorToString(gesture.direction, 2) + ", "
+//							+ "speed: " + gesture.speed.toFixed(1) + " mm/s";
+//					break;
+//				case "screenTap":
+//				case "keyTap":
+//					gestureString += "position: " + vectorToString(gesture.position) + " mm, "
+//							+ "direction: " + vectorToString(gesture.direction, 2);
+//					break;
 				default:
 					gestureString += "unkown gesture type";
 			}
-			gestureString += "<br />";
+//			gestureString += "<br />";
 			console.log(gestureString);
 		}
 	}
