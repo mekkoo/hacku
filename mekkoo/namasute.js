@@ -104,16 +104,18 @@ controller.on('animationFrame', function(frame){
 			flag = true;
 		}else {
 			if(parseInt(frame.hands[0].palmPosition[0]) >= (-40) && parseInt(frame.hands[0].palmPosition[0]) <= 40) {
-				handRightInit(parseInt(frame.hands[0].palmPosition[0]));
-				namasuteCnt++;
+				if(namasuteCnt == 100) {
+					namasuteAct();
+					namasuteCnt = 0;
+				}else {
+					handRightInit(parseInt(frame.hands[0].palmPosition[0]));
+					namasuteCnt++;
+				}
 			}else {
 				handRightInit("out");
 				console.log("-----------------------------");
-				flag = false;
-			}
-			if(namasuteCnt == 100) {
-				namasuteAct();
 				namasuteCnt = 0;
+				flag = false;
 			}
 		}	
 	}
