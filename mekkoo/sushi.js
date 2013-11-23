@@ -24,8 +24,9 @@ function vectorToString(vector, digits) {
 }
 
 //HTMLの#consoleにログを出力する関数 通常使わない
-function htmlOutput(data){
-	$("#console").after(data+" ");
+function htmlOutput(dataLeft, dataRight){
+	$("#console_left").text("left: "+dataLeft+" ");
+	$("#console_right").text("right: "+dataRight+" ");
 }
 
 //Leapオブジェクトを継承後、永久ループでモーション監視へ
@@ -52,14 +53,22 @@ Leap.loop(function(frame){
 			"handLeft: " +
 				handLeft.palmPosition[0] + //左手のX座標
 			"  handID: " +
-				handLeft.id //左手の一時的ID
+				handLeft.id + //左手の一時的ID
+			"  palmVelocity: " +
+				handLeft.palmVelocity
 		);
 
 		console.log(
 			"handRight: " +
 				handRight.palmPosition[0] + //右手のX座標
 			"  handID: " +
-				handRight.id //右手の一時的ID
+				handRight.id + //右手の一時的ID
+			"  palmVelocity: " +
+				handRight.palmVelocity
 		);
+
+		htmlOutput(parseInt(handLeft.palmVelocity[0]), parseInt(handRight.palmVelocity[0]));
+
 	}
+
 });
