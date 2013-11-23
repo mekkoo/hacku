@@ -44,8 +44,7 @@ Leap.loop(function(frame){
 		//hand0がhand1により左にあれば、左/右の関係をそのように指定
 		if(hand0.palmPosition[0] <= hand1.palmPosition[0]){
 			handLeft = hand0; handRight = hand1;
-			//hand1がhard0より左にあれば、逆に指定
-			}else{
+			}else{ //hand1がhard0より左にあれば、逆に指定
 				handLeft = hand1; handRight = hand0;
 		}
 
