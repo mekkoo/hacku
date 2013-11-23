@@ -7,7 +7,8 @@
 
 var sushiCnt = "";
 var handLeft = "";
-var handRight= "";
+var handRight = "";
+var outCnt = "";
 
 //寿司注文関数
 function sushiAct(){
@@ -23,14 +24,28 @@ function vectorToString(vector, digits) {
 			+ vector[2].toFixed(digits) + ")";
 }
 
-//HTMLの#consoleにログを出力する関数 通常使わない
+//HTMLの#consoleにログを出力する関数
 function htmlOutput(dataLeft, dataRight){
 	$("#console_left").text("left: "+dataLeft+" ");
 	$("#console_right").text("right: "+dataRight+" ");
 }
 
+function handRightInit(yPosition){
+	var init = $("#init");
+	switch (yPosition){
+		case "out":
+			outCnt++;
+			init.addClass("hide");
+			break;
+		default:
+			init.removeClass("hide").text(yPosition);
+			break;
+	}
+}
+
 //Leapオブジェクトを継承後、永久ループでモーション監視へ
-Leap.loop(function(frame){
+var controller = new Leap.Controller({enableGestures: true});
+controller.on('animationFrame', function(frame){
 	var frameString = "Frame ID: "  + frame.id  + ","
 			+ "Timestamp: " + frame.timestamp + ","
 			+ "Hands: "     + frame.hands.length + ","
@@ -45,30 +60,45 @@ Leap.loop(function(frame){
 		//hand0がhand1により左にあれば、左/右の関係をそのように指定
 		if(hand0.palmPosition[0] <= hand1.palmPosition[0]){
 			handLeft = hand0; handRight = hand1;
-			}else{ //hand1がhard0より左にあれば、逆に指定
-				handLeft = hand1; handRight = hand0;
+		}else{ //hand1がhard0より左にあれば、逆に指定
+			handLeft = hand1; handRight = hand0;
 		}
 
 		console.log(
-			"handLeft: " +
+			"handLeftX: " +
 				handLeft.palmPosition[0] + //左手のX座標
-			"  handID: " +
+			"handLeftY: " +
+				handLeft.palmPosition[1] + //左手のX座標
+			"handLeftZ: " +
+				handLeft.palmPosition[2] + //左手のX座標
+			"handID: " +
 				handLeft.id + //左手の一時的ID
-			"  palmVelocity: " +
+			"palmVelocity: " +
 				handLeft.palmVelocity
 		);
 
 		console.log(
-			"handRight: " +
+			"handRightX: " +
 				handRight.palmPosition[0] + //右手のX座標
-			"  handID: " +
+			"handRightY: " +
+				handRight.palmPosition[1] + //右手のX座標
+			"handRightZ: " +
+				handRight.palmPosition[2] + //右手のX座標
+			"handID: " +
 				handRight.id + //右手の一時的ID
-			"  palmVelocity: " +
+			"palmVelocity: " +
 				handRight.palmVelocity
 		);
 
-		htmlOutput(parseInt(handLeft.palmVelocity[0]), parseInt(handRight.palmVelocity[0]));
+		htmlOutput(parseInt(handLeft.palmPosition[1]), parseInt(handRight.palmPosition[1]));
+
+		if(parseInt(handRight.palmPosition[1]) >= 250){
+			handRightInit(parseInt(handRight.palmPosition[1]));
+		}else{
+			handRightInit("out");
+		}
 
 	}
 
 });
+controller.connect();
