@@ -111,7 +111,7 @@ controller.on('animationFrame', function(frame){
 				console.log("-----------------------------");
 				flag = false;
 			}
-			if(namasuteCnt == 80) {
+			if(namasuteCnt == 100) {
 				namasuteAct();
 				namasuteCnt = 0;
 			}
