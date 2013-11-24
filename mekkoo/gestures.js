@@ -99,11 +99,20 @@ function nigiriCntup(yPosition){
 	}
 }
 
+function vectorToString(vector, digits) {
+    if (typeof digits === "undefined") {
+        digits = 1;
+    }
+    return "(" + vector[0].toFixed(digits) + ", "   // toFixed(digits)は小数点digits桁以下を切り捨てする処理
+               + vector[1].toFixed(digits) + ", "
+               + vector[2].toFixed(digits) + ")";
+}
+
 //Leapオブジェクトを継承後、永久ループでモーション監視へ
 var controller = new Leap.Controller({enableGestures: true});
 controller.on('animationFrame', function(frame){
 
-	if(frame.hands.length >= 2){ //手が2本以上認識されている場合の処理
+	if(frame.hands.length >= 2 && previousFrame){ //手が2本以上認識されている場合の処理
 
 		var hand0 = frame.hands[0]; //hands[0]として認識された手の座標情報8
 		var hand1 = frame.hands[1]; //hands[1]として認識された手の座標情報
@@ -118,8 +127,29 @@ controller.on('animationFrame', function(frame){
 		htmlOutput(parseInt(handLeft.palmPosition[1]), parseInt(handRight.palmPosition[1]));
 		nigiriCntup(parseInt(handRight.palmPosition[1]));
 
-	} else if (frame.hands.length === 1){ //手が1本のみ認識されている場合の処理
+		//namasute
+		// 前のフレームで手が二本の場合にnamasuteFlagが立つ
+		if(namasuteFlag) {
+			var gestureString = "namasuteCnt:" + namasuteCnt;
+			// 手のX座標が -40 <= X <= 40　に収まっている場合
+			if(parseInt(frame.hands[0].palmPosition[0]) >= (-40) && parseInt(frame.hands[0].palmPosition[0]) <= 40) {
+				// namasuteCntが100ならnamasuteAct関数を起動しCnt初期化。そうでないならnamasuteCntをインクリメント
+				if(namasuteCnt === 45) {
+					namasuteAct();
+					namasuteCnt = 0;
+				}else {
+					namasuteCnt++;
+				}
+			}else {
+				namasuteCnt = 0;
+				namasuteFlag = false;
+			}
+			console.log(gestureString);
+		}else if(previousFrame.hands.length == 2){
+			namasuteFlag = true;
+		}
 
+	} else if (frame.hands.length === 1){ //手が1本のみ認識されている場合の処理
 		// pizza
 		if (frame.gestures.length > 0) {
 			for (var i = 0; i < frame.gestures.length; i++) {
@@ -141,32 +171,8 @@ controller.on('animationFrame', function(frame){
 				console.log(gestureString);
 			}
 		}
-
-		//namasute
-		// 前のフレームで手が二本の場合にnamasuteFlagが立つ
-		if(namasuteFlag) {
-			var gestureString = "namasuteCnt:" + namasuteCnt;
-			// 手のX座標が -40 <= X <= 40　に収まっている場合
-			if(parseInt(frame.hands[0].palmPosition[0]) >= (-40) && parseInt(frame.hands[0].palmPosition[0]) <= 40) {
-				// namasuteCntが100ならnamasuteAct関数を起動しCnt初期化。そうでないならnamasuteCntをインクリメント
-				if(namasuteCnt === 40) {
-					namasuteAct();
-					namasuteCnt = 0;
-				}else {
-//					handRightInit(parseInt(frame.hands[0].palmPosition[0]));
-					namasuteCnt++;
-				}
-			}else {
-//				handRightInit("out");
-//				console.log("-----------------------------");
-				namasuteCnt = 0;
-				namasuteFlag = false;
-			}
-			console.log(gestureString);
-		}else if(previousFrame.hands.length == 2){
-			namasuteFlag = true;
-		}
 	}
+
 	previousFrame = frame;
 });
 controller.connect();
