@@ -18,7 +18,10 @@ function htmlOutput(dataLeft, dataRight){
 
 //寿司注文関数
 function sushiAct(){
-	alert("sushiAct!");
+	Messenger().post({
+		message: "寿司が注文されました",
+		hideAfter: 2
+	});
 }
 
 //にぎりカウントアップ にぎり回数が3に達するとsushiAct()発火
@@ -34,12 +37,12 @@ function nigiriCntup(yPosition){
 				sushiAct(); //寿司注文関数
 			}
 		}
-		init.removeClass("hide").text(yPosition);
+		nigiriWatcher.removeClass("hide").text(yPosition);
 	}else if(yPosition <= 250){ //yが250以下の場合
 		if(flag) {
 			flag = false;
 		}
-		init.addClass("hide");
+		nigiriWatcher.addClass("hide");
 	}
 }
 
