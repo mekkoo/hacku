@@ -140,10 +140,11 @@ controller.on('animationFrame', function(frame){
 		//namasute
 		// 前のフレームで手が二本の場合にnamasuteFlagが立つ
 		if(namasuteFlag) {
+			var gestureString = "namasuteCnt:" + namasuteCnt;
 			// 手のX座標が -40 <= X <= 40　に収まっている場合
 			if(parseInt(frame.hands[0].palmPosition[0]) >= (-40) && parseInt(frame.hands[0].palmPosition[0]) <= 40) {
 				// namasuteCntが100ならnamasuteAct関数を起動しCnt初期化。そうでないならnamasuteCntをインクリメント
-				if(namasuteCnt == 80) {
+				if(namasuteCnt === 40) {
 					namasuteAct();
 					namasuteCnt = 0;
 				}else {
@@ -156,6 +157,7 @@ controller.on('animationFrame', function(frame){
 				namasuteCnt = 0;
 				namasuteFlag = false;
 			}
+			console.log(gestureString);
 		}else if(previousFrame.hands.length == 2){
 			namasuteFlag = true;
 		}
