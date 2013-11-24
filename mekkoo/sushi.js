@@ -10,11 +10,7 @@ var handRight = 0;
 var cnt = 0;
 var flag = false;
 
-//HTMLの#consoleにログを出力する用
-function htmlOutput(dataLeft, dataRight){
-	$("#console_left").text("left: "+dataLeft+" ");
-	$("#console_right").text("right: "+dataRight+" ");
-}
+var pizzaCnt = "";
 
 //寿司注文関数
 function sushiAct(){
@@ -22,6 +18,48 @@ function sushiAct(){
 		message: "寿司が注文されました",
 		hideAfter: 2
 	});
+}
+
+//ピザ注文関数
+function pizzaAct(){
+	Messenger().post({
+		message: "ピザが注文されました",
+		hideAfter: 2
+	});
+}
+
+//HTMLの#consoleにログを出力する用
+function htmlOutput(dataLeft, dataRight){
+	$("#console_left").text("left: "+dataLeft+" ");
+	$("#console_right").text("right: "+dataRight+" ");
+}
+
+function consoleLog(handLeft, handRight) {
+	console.log(
+		"handLeftX: " +
+			handLeft.palmPosition[0] + //左手のX座標
+			"handLeftY: " +
+			handLeft.palmPosition[1] + //左手のX座標
+			"handLeftZ: " +
+			handLeft.palmPosition[2] + //左手のX座標
+			"handID: " +
+			handLeft.id + //左手の一時的ID
+			"palmVelocity: " +
+			handLeft.palmVelocity
+	);
+
+	console.log(
+		"handRightX: " +
+			handRight.palmPosition[0] + //右手のX座標
+			"handRightY: " +
+			handRight.palmPosition[1] + //右手のX座標
+			"handRightZ: " +
+			handRight.palmPosition[2] + //右手のX座標
+			"handID: " +
+			handRight.id + //右手の一時的ID
+			"palmVelocity: " +
+			handRight.palmVelocity
+	);
 }
 
 //にぎりカウントアップ にぎり回数が3に達するとsushiAct()発火
@@ -33,12 +71,12 @@ function nigiriCntup(yPosition){
 			flag = true; //カウント中断のフラグを建てる
 			cnt++; //カウントアップ
 			cntConsole.text(cnt);
-			if(cnt  === 3){ //3に達するとsushiAct()発火
+			if(cnt % 3 === 0){ //3に達するとsushiAct()発火
 				sushiAct(); //寿司注文関数
 			}
 		}
 		nigiriWatcher.removeClass("hide").text(yPosition);
-	}else if(yPosition <= 250){ //yが250以下の場合
+	} else if (yPosition <= 250){ //yが250以下の場合
 		if(flag) {
 			flag = false;
 		}
@@ -49,14 +87,9 @@ function nigiriCntup(yPosition){
 //Leapオブジェクトを継承後、永久ループでモーション監視へ
 var controller = new Leap.Controller({enableGestures: true});
 controller.on('animationFrame', function(frame){
-	var frameString = "Frame ID: "  + frame.id  + ","
-			+ "Timestamp: " + frame.timestamp + ","
-			+ "Hands: "     + frame.hands.length + ","
-			+ "Fingers: "   + frame.fingers.length + ","
-			+ "Tools: "     + frame.tools.length + ","
-			+ "Gestures: "  + frame.gestures.length + ",";
 
-	if(frame.hands.length >= 2){ //手が2本以上ないと認識しないように
+	if(frame.hands.length >= 2){ //手が2本以上認識されている場合の処理
+
 		var hand0 = frame.hands[0]; //hands[0]として認識された手の座標情報
 		var hand1 = frame.hands[1]; //hands[1]として認識された手の座標情報
 
@@ -67,34 +100,29 @@ controller.on('animationFrame', function(frame){
 			handLeft = hand1; handRight = hand0;
 		}
 
-		console.log(
-			"handLeftX: " +
-				handLeft.palmPosition[0] + //左手のX座標
-			"handLeftY: " +
-				handLeft.palmPosition[1] + //左手のX座標
-			"handLeftZ: " +
-				handLeft.palmPosition[2] + //左手のX座標
-			"handID: " +
-				handLeft.id + //左手の一時的ID
-			"palmVelocity: " +
-				handLeft.palmVelocity
-		);
-
-		console.log(
-			"handRightX: " +
-				handRight.palmPosition[0] + //右手のX座標
-			"handRightY: " +
-				handRight.palmPosition[1] + //右手のX座標
-			"handRightZ: " +
-				handRight.palmPosition[2] + //右手のX座標
-			"handID: " +
-				handRight.id + //右手の一時的ID
-			"palmVelocity: " +
-				handRight.palmVelocity
-		);
-
 		htmlOutput(parseInt(handLeft.palmPosition[1]), parseInt(handRight.palmPosition[1]));
 		nigiriCntup(parseInt(handRight.palmPosition[1]));
+
+	} else if (frame.hands.length === 1){ //手が1本のみ認識されている場合の処理
+
+		// pizza
+		if (frame.gestures.length > 0) {
+			for (var i = 0; i < frame.gestures.length; i++) {
+				var gesture = frame.gestures[i];
+				switch (gesture.type) {
+					case "circle":
+						//pizzaCntにインクリメント
+						pizzaCnt++;
+						var gestureString = "pizzaCnt:" + pizzaCnt;
+						//50回ごとにpizzaAct関数を起動
+						if (pizzaCnt % 80 === 0) pizzaAct();
+						break;
+					default:
+						break;
+				}
+				console.log(gestureString);
+			}
+		}
 	}
 
 });
