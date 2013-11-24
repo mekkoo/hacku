@@ -5,15 +5,19 @@
 //サルでもわかるLeap
 //http://syslog.shimy.net/?p=619
 
+var previousFrame = "";
+
 var handLeft = 0;
 var handRight = 0;
-var cnt = 0;
+
+var sushiCnt = 0;
 var sushiFlag = false;
-var namasuteFlag = false;
-var previousFrame = "";
-var pizzaCnt = 0;
+
 var namasuteCnt = 0;
-var gestureStrings = "";
+var namasuteFlag = false;
+
+var pizzaCnt = 0;
+var pizzaFlag = false;
 
 //寿司注文関数
 function sushiAct(){
@@ -79,10 +83,11 @@ function nigiriCntup(yPosition){
 	if(yPosition >= 300){ //yが300以上の場合
 		if(!sushiFlag) { //すでに300以上の場合、カウント処理をスキップ
 			sushiFlag = true; //カウント中断のフラグを建てる
-			cnt++; //カウントアップ
-			cntConsole.text(cnt);
-			if(cnt % 3 === 0){ //3に達するとsushiAct()発火
+			sushiCnt++; //カウントアップ
+			cntConsole.text(sushiCnt);
+			if(sushiCnt === 3){ //3に達するとsushiAct()発火
 				sushiAct(); //寿司注文関数
+				sushiCnt = 0;
 			}
 		}
 		nigiriWatcher.removeClass("hide").text(yPosition);
