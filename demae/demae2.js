@@ -49,8 +49,8 @@ new funcs([
             page.render('step2.png');
         }, 200);
         page.evaluate(function() {
-            document.getElementById('ma_email').value = "okame0904@gmail.com";
-            document.getElementById('ma_password').value   = "tukurua0904";
+            document.getElementById('ma_email').value = "ユーザー名いれる";
+            document.getElementById('ma_password').value   = "パスワードいれる";
             document.getElementById('mainForm').submit(); // 次ページヘ
         });
     },
