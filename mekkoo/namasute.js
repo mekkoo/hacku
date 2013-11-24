@@ -119,8 +119,6 @@ controller.on('animationFrame', function(frame){
 			}
 		}	
 	}
-	// else if(frame.hands.length == 1 && previousFrame) {
-	// }
 
 	previousFrame = frame;
 });
