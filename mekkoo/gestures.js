@@ -13,6 +13,7 @@ var namasuteFlag = false;
 var previousFrame = "";
 var pizzaCnt = 0;
 var namasuteCnt = 0;
+var gestureStrings = "";
 
 //寿司注文関数
 function sushiAct(){
@@ -75,8 +76,8 @@ function consoleLog(handLeft, handRight) {
 function nigiriCntup(yPosition){
 	var nigiriWatcher = $("#nigiri_watcher");
 	var cntConsole = $("#cnt_console");
-	if(yPosition >= 250){ //yが250以上の場合
-		if(!sushiFlag) { //すでに250以上の場合、カウント処理をスキップ
+	if(yPosition >= 300){ //yが300以上の場合
+		if(!sushiFlag) { //すでに300以上の場合、カウント処理をスキップ
 			sushiFlag = true; //カウント中断のフラグを建てる
 			cnt++; //カウントアップ
 			cntConsole.text(cnt);
