@@ -8,9 +8,11 @@
 var handLeft = 0;
 var handRight = 0;
 var cnt = 0;
-var flag = false;
-
-var pizzaCnt = "";
+var sushiFlag = false;
+var namasuteFlag = false;
+var previousFrame = "";
+var pizzaCnt = 0;
+var namasuteCnt = 0;
 
 //寿司注文関数
 function sushiAct(){
@@ -24,6 +26,13 @@ function sushiAct(){
 function pizzaAct(){
 	Messenger().post({
 		message: "ピザが注文されました",
+		hideAfter: 2
+	});
+}
+
+function namasuteAct(){
+	Messenger().post({
+		message: "インド人が注文されました",
 		hideAfter: 2
 	});
 }
@@ -67,8 +76,8 @@ function nigiriCntup(yPosition){
 	var nigiriWatcher = $("#nigiri_watcher");
 	var cntConsole = $("#cnt_console");
 	if(yPosition >= 250){ //yが250以上の場合
-		if(!flag) { //すでに250以上の場合、カウント処理をスキップ
-			flag = true; //カウント中断のフラグを建てる
+		if(!sushiFlag) { //すでに250以上の場合、カウント処理をスキップ
+			sushiFlag = true; //カウント中断のフラグを建てる
 			cnt++; //カウントアップ
 			cntConsole.text(cnt);
 			if(cnt % 3 === 0){ //3に達するとsushiAct()発火
@@ -77,8 +86,8 @@ function nigiriCntup(yPosition){
 		}
 		nigiriWatcher.removeClass("hide").text(yPosition);
 	} else if (yPosition <= 250){ //yが250以下の場合
-		if(flag) {
-			flag = false;
+		if(sushiFlag) {
+			sushiFlag = false;
 		}
 		nigiriWatcher.addClass("hide");
 	}
@@ -90,7 +99,7 @@ controller.on('animationFrame', function(frame){
 
 	if(frame.hands.length >= 2){ //手が2本以上認識されている場合の処理
 
-		var hand0 = frame.hands[0]; //hands[0]として認識された手の座標情報
+		var hand0 = frame.hands[0]; //hands[0]として認識された手の座標情報8
 		var hand1 = frame.hands[1]; //hands[1]として認識された手の座標情報
 
 		//hand0がhand1により左にあれば、左/右の関係をそのように指定
@@ -115,7 +124,10 @@ controller.on('animationFrame', function(frame){
 						pizzaCnt++;
 						var gestureString = "pizzaCnt:" + pizzaCnt;
 						//50回ごとにpizzaAct関数を起動
-						if (pizzaCnt % 80 === 0) pizzaAct();
+						if (pizzaCnt === 80){
+							pizzaAct();
+							pizzaCnt = 0;
+						}
 						break;
 					default:
 						break;
@@ -123,7 +135,30 @@ controller.on('animationFrame', function(frame){
 				console.log(gestureString);
 			}
 		}
-	}
 
+		//namasute
+		// 前のフレームで手が二本の場合にnamasuteFlagが立つ
+		if(namasuteFlag) {
+			// 手のX座標が -40 <= X <= 40　に収まっている場合
+			if(parseInt(frame.hands[0].palmPosition[0]) >= (-40) && parseInt(frame.hands[0].palmPosition[0]) <= 40) {
+				// namasuteCntが100ならnamasuteAct関数を起動しCnt初期化。そうでないならnamasuteCntをインクリメント
+				if(namasuteCnt == 80) {
+					namasuteAct();
+					namasuteCnt = 0;
+				}else {
+//					handRightInit(parseInt(frame.hands[0].palmPosition[0]));
+					namasuteCnt++;
+				}
+			}else {
+//				handRightInit("out");
+//				console.log("-----------------------------");
+				namasuteCnt = 0;
+				namasuteFlag = false;
+			}
+		}else if(previousFrame.hands.length == 2){
+			namasuteFlag = true;
+		}
+	}
+	previousFrame = frame;
 });
 controller.connect();
