@@ -124,7 +124,7 @@ controller.on('animationFrame', function(frame){
 		if(namasuteFlag) {
 			// var gestureString = "namasuteCnt:" + namasuteCnt;
 			// 手のX座標が -40 <= X <= 40　に収まっている場合
-			if(parseInt(frame.hands[0].palmPosition[0]) >= (-40) && parseInt(frame.hands[0].palmPosition[0]) <= 40) {
+			if(parseInt(frame.hands[0].palmPosition[0]) >= (-40) && parseInt(frame.hands[0].palmPosition[0]) <= 40　&& parseInt(frame.hands[0].palmPosition[1]) <= 200) {
 				// namasuteCntが100ならnamasuteAct関数を起動しCnt初期化。そうでないならnamasuteCntをインクリメント
 				if(namasuteCnt === 45) {
 					namasuteAct();
