@@ -56,15 +56,15 @@ controller.on('animationFrame', function(frame){
 			+ "Gestures: "  + frame.gestures.length + ",";
 
 	if(frame.hands.length >= 2 && previousFrame){ //手が2本以上ないと認識しないように
-		var hand0 = frame.hands[0]; //hands[0]として認識された手の座標情報
-		var hand1 = frame.hands[1]; //hands[1]として認識された手の座標情報
+		// var hand0 = frame.hands[0]; //hands[0]として認識された手の座標情報
+		// var hand1 = frame.hands[1]; //hands[1]として認識された手の座標情報
 
-		//hand0がhand1により左にあれば、左/右の関係をそのように指定
-		if(hand0.palmPosition[0] <= hand1.palmPosition[0]){
-			handLeft = hand0; handRight = hand1;
-		}else{ //hand1がhard0より左にあれば、逆に指定
-			handLeft = hand1; handRight = hand0;
-		}
+		// //hand0がhand1により左にあれば、左/右の関係をそのように指定
+		// if(hand0.palmPosition[0] <= hand1.palmPosition[0]){
+		// 	handLeft = hand0; handRight = hand1;
+		// }else{ //hand1がhard0より左にあれば、逆に指定
+		// 	handLeft = hand1; handRight = hand0;
+		// }
 
 		// console.log(
 		// 	"handLeftX: " +
@@ -100,11 +100,33 @@ controller.on('animationFrame', function(frame){
 		// 	handRightInit("out");
 		// } 
 
-		if(!flag && previousFrame.hands.length == 2) {
-			flag = true;
-		}else {
+		// if(!flag && previousFrame.hands.length == 2) {
+		// 	flag = true;
+		// }else {
+		// 	// 手のX座標が -40 <= X <= 40　に収まっている場合
+		// 	if(parseInt(frame.hands[0].palmPosition[0]) >= (-40) && parseInt(frame.hands[0].palmPosition[0]) <= 40) {
+		// 		// namasuteCntが100ならnamasuteAct関数を起動しCnt初期化。そうでないならnamasuteCntをインクリメント
+		// 		if(namasuteCnt == 100) {
+		// 			namasuteAct();
+		// 			namasuteCnt = 0;
+		// 		}else {
+		// 			handRightInit(parseInt(frame.hands[0].palmPosition[0]));
+		// 			namasuteCnt++;
+		// 		}
+		// 	}else {
+		// 		handRightInit("out");
+		// 		console.log("-----------------------------");
+		// 		namasuteCnt = 0;
+		// 		flag = false;
+		// 	}
+		// }	
+
+		// 前のフレームで手が二本の場合にflagが立つ
+		if(flag) {
+			// 手のX座標が -40 <= X <= 40　に収まっている場合
 			if(parseInt(frame.hands[0].palmPosition[0]) >= (-40) && parseInt(frame.hands[0].palmPosition[0]) <= 40) {
-				if(namasuteCnt == 100) {
+				// namasuteCntが100ならnamasuteAct関数を起動しCnt初期化。そうでないならnamasuteCntをインクリメント
+				if(namasuteCnt == 80) {
 					namasuteAct();
 					namasuteCnt = 0;
 				}else {
@@ -117,10 +139,10 @@ controller.on('animationFrame', function(frame){
 				namasuteCnt = 0;
 				flag = false;
 			}
+		}else if(previousFrame.hands.length == 2){ 
+			flag = true;
 		}	
 	}
-	// else if(frame.hands.length == 1 && previousFrame) {
-	// }
 
 	previousFrame = frame;
 });
