@@ -128,7 +128,7 @@ controller.on('animationFrame', function(frame){
 					case "circle":
 						//pizzaCntにインクリメント
 						pizzaCnt++;
-						var gestureString = "pizzaCnt:" + pizzaCnt;
+//						var gestureString = "pizzaCnt:" + pizzaCnt;
 						//50回ごとにpizzaAct関数を起動
 						if (pizzaCnt === 80){
 							pizzaAct();
@@ -138,7 +138,7 @@ controller.on('animationFrame', function(frame){
 					default:
 						break;
 				}
-				console.log(gestureString);
+//				console.log(gestureString);
 			}
 		}
 
