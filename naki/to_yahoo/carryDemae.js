@@ -101,12 +101,17 @@ new funcs([
             */
             // カートに入れるボタンの位置を取得
             // page.evaluateメソッドを使ってページ内部でのJavaScript実行結果を取得できる
-            var btnClickPosition = page.evaluate(function() {
-            	var btnParentElement = document.getElementById("btn_shop_detail");
-            	var btnChildElement = btnParentElement.lastChild;;
-                var btn = btnChildElement.get(0);
+            //var btnClickPosition = page.evaluate(function() {
+            	document.querySelectorAll("[href='/shop/item/']").onclick();
+
+            	//var childElements = element.childNodes;
+            	//console.log(btn.innerHTML);
+
+                //var btn = btnChildElement.get(0);
+
+                /*
                 var rect = btn.getBoundingClientRect();
- 
+ 				
                 var sx = (btn.screen) ? 0 : document.body.scrollLeft;
                 var sy = (btn.screen) ? 0 : document.body.scrollTop;
                 var position = {
@@ -115,25 +120,39 @@ new funcs([
                     width: Math.floor(rect.width),
                     height: Math.floor(rect.height)
                 };
+				
+
+				var sx = (btn.screen) ? 0 : document.body.scrollLeft;
+                var sy = (btn.screen) ? 0 : document.body.scrollTop;
+
+                
+                var position = {
+                    left: Math.floor(rect.left),
+                    top: Math.floor(rect.top),
+                    width: Math.floor(rect.width),
+                    height: Math.floor(rect.height)
+                };
  
                 return {
                     left: Math.round(position.left + position.width / 2),
                     top: Math.round(position.top + position.height / 2)
                 };
-            });
+             */
+            //});
+			
  
-            // ボタンをクリックしてモーダルウィンドウを表示
-            page.sendEvent('click', btnClickPosition.left, btnClickPosition.top);
+            // ボタンをクリックしてカートに入れるイベント
+            //page.sendEvent('click', btnClickPosition.left, btnClickPosition.top);
  
             // Ajaxリクエストが発生するため１秒待つ
             setTimeout(function() {
                 // ページのキャプチャ
                 page.render('carryStep6.png');
- 
+ 				phantom.exit();
                 // 非同期処理の終了
-                done();
-            }, 200);
-     },
+                //done();
+            }, 1000);
+     }/*,
 		function() {
 		console.log('カートに入れるよ',page.url);
 		setTimeout(function() {
@@ -143,5 +162,6 @@ new funcs([
         
 		//page.open('https://demae-can.com/order/cart/disp/61e9ab3a2da8d70d3ad4b37c87db2ec4?siteCd=honke&author=demae&countUrlGroupId=&countUrlSeqNo=&campaignId=&brandShopId=&addressId=1&fromItem=item'); // 
 	}
+	*/
 
 ]).next();
