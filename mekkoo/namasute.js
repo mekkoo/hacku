@@ -10,7 +10,7 @@ var handLeft = "";
 var handRight = "";
 var outCnt = "";
 var previousFrame = "";
-var flag = false;
+var namasuteFlag = false;
 
 //ナマステ注文関数
 function namasuteAct(){
@@ -100,8 +100,8 @@ controller.on('animationFrame', function(frame){
 		// 	handRightInit("out");
 		// } 
 
-		// if(!flag && previousFrame.hands.length == 2) {
-		// 	flag = true;
+		// if(!namasuteFlag && previousFrame.hands.length == 2) {
+		// 	namasuteFlag = true;
 		// }else {
 		// 	// 手のX座標が -40 <= X <= 40　に収まっている場合
 		// 	if(parseInt(frame.hands[0].palmPosition[0]) >= (-40) && parseInt(frame.hands[0].palmPosition[0]) <= 40) {
@@ -117,12 +117,12 @@ controller.on('animationFrame', function(frame){
 		// 		handRightInit("out");
 		// 		console.log("-----------------------------");
 		// 		namasuteCnt = 0;
-		// 		flag = false;
+		// 		namasuteFlag = false;
 		// 	}
 		// }	
 
-		// 前のフレームで手が二本の場合にflagが立つ
-		if(flag) {
+		// 前のフレームで手が二本の場合にnamasuteFlagが立つ
+		if(namasuteFlag) {
 			// 手のX座標が -40 <= X <= 40　に収まっている場合
 			if(parseInt(frame.hands[0].palmPosition[0]) >= (-40) && parseInt(frame.hands[0].palmPosition[0]) <= 40) {
 				// namasuteCntが100ならnamasuteAct関数を起動しCnt初期化。そうでないならnamasuteCntをインクリメント
@@ -137,10 +137,10 @@ controller.on('animationFrame', function(frame){
 				handRightInit("out");
 				console.log("-----------------------------");
 				namasuteCnt = 0;
-				flag = false;
+				namasuteFlag = false;
 			}
 		}else if(previousFrame.hands.length == 2){ 
-			flag = true;
+			namasuteFlag = true;
 		}	
 	}
 
