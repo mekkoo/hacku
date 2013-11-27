@@ -92,76 +92,20 @@ new funcs([
 	},
 	function() {
 			console.log('バターチキンカレーを食べるよ',page.url);
-			/*
-            if (status !== 'success') {
-                console.log('error!');
-                phantom.exit();
-                return;
-            }
-            */
-            // カートに入れるボタンの位置を取得
-            // page.evaluateメソッドを使ってページ内部でのJavaScript実行結果を取得できる
-            //var btnClickPosition = page.evaluate(function() {
-            	document.querySelectorAll("[href='/shop/item/']").onclick();
+  			page.includeJs("//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js", function(){ // jQueryをinclude
+    			var offset = page.evaluate(function(){ // リンクのoffsetを取得
+      				return $('a[href="/shop/item/"]').offset();
+    			});
+    			console.log("left:"+offset.left+",top:"+ offset.top);
+    			page.sendEvent('click', offset.left+1, offset.top+1); // クリック
+    		});
 
-            	//var childElements = element.childNodes;
-            	//console.log(btn.innerHTML);
 
-                //var btn = btnChildElement.get(0);
-
-                /*
-                var rect = btn.getBoundingClientRect();
- 				
-                var sx = (btn.screen) ? 0 : document.body.scrollLeft;
-                var sy = (btn.screen) ? 0 : document.body.scrollTop;
-                var position = {
-                    left: Math.floor(rect.left + sx),
-                    top: Math.floor(rect.top + sy),
-                    width: Math.floor(rect.width),
-                    height: Math.floor(rect.height)
-                };
-				
-
-				var sx = (btn.screen) ? 0 : document.body.scrollLeft;
-                var sy = (btn.screen) ? 0 : document.body.scrollTop;
-
-                
-                var position = {
-                    left: Math.floor(rect.left),
-                    top: Math.floor(rect.top),
-                    width: Math.floor(rect.width),
-                    height: Math.floor(rect.height)
-                };
- 
-                return {
-                    left: Math.round(position.left + position.width / 2),
-                    top: Math.round(position.top + position.height / 2)
-                };
-             */
-            //});
-			
- 
-            // ボタンをクリックしてカートに入れるイベント
-            //page.sendEvent('click', btnClickPosition.left, btnClickPosition.top);
- 
-            // Ajaxリクエストが発生するため１秒待つ
             setTimeout(function() {
                 // ページのキャプチャ
                 page.render('carryStep6.png');
  				phantom.exit();
-                // 非同期処理の終了
-                //done();
-            }, 1000);
-     }/*,
-		function() {
-		console.log('カートに入れるよ',page.url);
-		setTimeout(function() {
-            page.render('carryStep7.png');
-        	phantom.exit();
-        }, 200);
-        
-		//page.open('https://demae-can.com/order/cart/disp/61e9ab3a2da8d70d3ad4b37c87db2ec4?siteCd=honke&author=demae&countUrlGroupId=&countUrlSeqNo=&campaignId=&brandShopId=&addressId=1&fromItem=item'); // 
-	}
-	*/
+            }, 200);
+     }
 
 ]).next();
