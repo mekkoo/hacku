@@ -15,6 +15,7 @@ page.onInitialized = function() {
 	});
 };
 
+
 // ページが読み込まれたら登録した関数の配列を順次実行してくれるクラス
 var funcs = function(funcs) {
 	this.funcs = funcs;
@@ -91,21 +92,73 @@ new funcs([
 		page.open('https://demae-can.com/shop/item/3004627/104a1/001/?menuCd=JBZ1_104&selectedMenuCd=&selectedCodeHistory=&blockCd=13103001009&addressId=1');
 	},
 	function() {
-			console.log('バターチキンカレーを食べるよ',page.url);
-  			page.includeJs("//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js", function(){ // jQueryをinclude
-    			var offset = page.evaluate(function(){ // リンクのoffsetを取得
-      				return $('a[href="/shop/item/"]').offset();
-    			});
-    			console.log("left:"+offset.left+",top:"+ offset.top);
-    			page.sendEvent('click', offset.left+1, offset.top+1); // クリック
-    		});
+		console.log('バターチキンカレーを食べるよ',page.url);
+
+        // jsを実行(出前館はjQueryを読み込んでいるのでその前提で)
+        page.evaluate(function() {
+            // 対象ページ内でclick()を実装
+            // 参考：http://stackoverflow.com/questions/15739263/phantomjs-click-an-element#answer-17789929
+            HTMLElement.prototype.click = function() {
+                var ev = document.createEvent('MouseEvent');
+                ev.initMouseEvent(
+                    'click',
+                    /*bubble*/true, /*cancelable*/true,
+                    window, null,
+                    0, 0, 0, 0, /*coordinates*/
+                    false, false, false, false, /*modifier keys*/
+                    0/*button=left*/, null
+                );
+                this.dispatchEvent(ev);
+            };
+
+             $('#btn_shop_detail a[href=/shop/item/]')[0].click();//カートにいれるボタン
+            //$('#btn_shop_detail a[href^=/shop]')[0].click();//キャンセルボタン
+
+        });
+
+        setTimeout(function() {
+        	//fix:レンダリングできてない？
+        	page.render('carryStep6.png');
+       	}, 200);
+     },
+     function() {    	
+        console.log("カートに入れたよ", page.url);
+
+        // jsを実行
+        page.evaluate(function() {
+        	//カレーの個数を2個にする（1000円以上じゃないと頼めない）
+        	document.getElementById("ma_order_count").value="2";
+
+            // 対象ページ内でclick()を実装
+            HTMLElement.prototype.click = function() {
+                var ev = document.createEvent('MouseEvent');
+                ev.initMouseEvent(
+                    'click',
+                    /*bubble*/true, /*cancelable*/true,
+                    window, null,
+                    0, 0, 0, 0, /*coordinates*/
+                    false, false, false, false, /*modifier keys*/
+                    0/*button=left*/, null
+                );
+                this.dispatchEvent(ev);
+            };
+
+            //fix:動かない
+			$('.cart_order_info')[0].click();  
+             //$('#ma_order_next_link')[0].click();//次へボタン
+
+        });
+
+        setTimeout(function() {
+        	page.render('carryStep7.png');
+       	}, 200);
+     },
+     function() {    	
+        console.log("注文画面にいった？", page.url);
 
 
-            setTimeout(function() {
-                // ページのキャプチャ
-                page.render('carryStep6.png');
- 				phantom.exit();
-            }, 200);
-     }
+       	//phantom.jsを終了
+        phantom.exit();
+     }    
 
 ]).next();
