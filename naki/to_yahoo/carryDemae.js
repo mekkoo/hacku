@@ -15,7 +15,6 @@ page.onInitialized = function() {
 	});
 };
 
-
 // ページが読み込まれたら登録した関数の配列を順次実行してくれるクラス
 var funcs = function(funcs) {
 	this.funcs = funcs;
@@ -44,13 +43,13 @@ funcs.prototype = {
 new funcs([
 
 	function() {
-		console.log('ログインするよ！',page.url);	
+        console.log('＼出前の錬金術士！！／');   
+		console.log('出前館にログインするよ！',page.url);	
 		setTimeout(function() {
             page.render('carryStep1.png');
         }, 200);
 		page.open('https://demae-can.com/login/top/'); // 次ページヘ
 	},
-
 	function() {
 		console.log('ログイン画面にいったよ！',page.url);
        setTimeout(function() {
@@ -83,7 +82,7 @@ new funcs([
 		//情熱カレー　禅　六本木店を選択
 	},
 	function() {
-		console.log('情熱カレー禅六本木店にしたよ',page.url);
+		console.log('情熱カレー禅六本木店のカレーにしたよ',page.url);
 		setTimeout(function() {
             page.render('carryStep5.png');
         }, 200);
@@ -113,52 +112,58 @@ new funcs([
 
              $('#btn_shop_detail a[href=/shop/item/]')[0].click();//カートにいれるボタン
             //$('#btn_shop_detail a[href^=/shop]')[0].click();//キャンセルボタン
-
         });
 
         setTimeout(function() {
-        	//fix:レンダリングできてない？
         	page.render('carryStep6.png');
        	}, 200);
      },
-     function() {    	
-        console.log("カートに入れたよ", page.url);
-
-        // jsを実行
-        page.evaluate(function() {
-        	//カレーの個数を2個にする（1000円以上じゃないと頼めない）
-        	document.getElementById("ma_order_count").value="2";
-
-            // 対象ページ内でclick()を実装
-            HTMLElement.prototype.click = function() {
-                var ev = document.createEvent('MouseEvent');
-                ev.initMouseEvent(
-                    'click',
-                    /*bubble*/true, /*cancelable*/true,
-                    window, null,
-                    0, 0, 0, 0, /*coordinates*/
-                    false, false, false, false, /*modifier keys*/
-                    0/*button=left*/, null
-                );
-                this.dispatchEvent(ev);
-            };
-
-            //fix:動かない
-			$('.cart_order_info')[0].click();  
-             //$('#ma_order_next_link')[0].click();//次へボタン
+     function() {
+		
+		//テスト→これは動く
+		var test = page.evaluate(function() {
+            //var hoge = "テスト1";
+            //var btn = $('.cart_order_info > a').attr('id');
+            // return hoge;
+            //return btn;
 
         });
+		console.log("ボタンのIDは", test);
+
+		// jsを実行
+        page.evaluate(function() {
+        	var btn = $('.cart_order_info > a').attr('id');
+            console.log("evalueteテスト", btn);
+            //カレーの個数を2個にする（1000円以上じゃないと頼めない）
+            //document.getElementById("ma_order_count").value="2";
+            // console.log("テスト1");
+
+            // 対象ページ内でclick()を実装
+
+            //fix:動かない
+            //jQuery(配列)からHTMLElementを取り出すために[0]を使う
+            //$('#ma_order_next_link')[0].click();//注文へボタン
+            //$('.cart_order_info')[0].click(); 
+            //document.getElementById("ma_order_next_link").click();
+		});
+
+        //適当に遷移させる（functionを動かす）
+        page.open("https://demae-can.com/order/cart/forward");
 
         setTimeout(function() {
         	page.render('carryStep7.png');
-       	}, 200);
+       	}, 600);
+
      },
      function() {    	
-        console.log("注文画面にいった？", page.url);
+        console.log("注文画面へ", page.url);
 
+        setTimeout(function() {
+        	page.render('carryStep8.png');
+       	}, 200);
 
        	//phantom.jsを終了
+       	console.log("出前の錬金術士としての指名を全うした...");
         phantom.exit();
      }    
-
 ]).next();
