@@ -99,14 +99,6 @@ function nigiriCntup(yPosition){
 	}
 }
 
-function vectorToString(vector, digits) {
-    if (typeof digits === "undefined") {
-        digits = 1;
-    }
-    return "(" + vector[0].toFixed(digits) + ", "   // toFixed(digits)は小数点digits桁以下を切り捨てする処理
-               + vector[1].toFixed(digits) + ", "
-               + vector[2].toFixed(digits) + ")";
-}
 
 //Leapオブジェクトを継承後、永久ループでモーション監視へ
 var controller = new Leap.Controller({enableGestures: true});
@@ -130,9 +122,9 @@ controller.on('animationFrame', function(frame){
 		//namasute
 		// 前のフレームで手が二本の場合にnamasuteFlagが立つ
 		if(namasuteFlag) {
-			var gestureString = "namasuteCnt:" + namasuteCnt;
+			// var gestureString = "namasuteCnt:" + namasuteCnt;
 			// 手のX座標が -40 <= X <= 40　に収まっている場合
-			if(parseInt(frame.hands[0].palmPosition[0]) >= (-40) && parseInt(frame.hands[0].palmPosition[0]) <= 40) {
+			if(parseInt(frame.hands[0].palmPosition[0]) >= (-40) && parseInt(frame.hands[0].palmPosition[0]) <= 40　&& parseInt(frame.hands[0].palmPosition[1]) <= 200) {
 				// namasuteCntが100ならnamasuteAct関数を起動しCnt初期化。そうでないならnamasuteCntをインクリメント
 				if(namasuteCnt === 40) {
 					namasuteAct();
@@ -144,7 +136,7 @@ controller.on('animationFrame', function(frame){
 				namasuteCnt = 0;
 				namasuteFlag = false;
 			}
-			console.log(gestureString);
+			// console.log(gestureString);
 		}else if(previousFrame.hands.length == 2){
 			namasuteFlag = true;
 		}

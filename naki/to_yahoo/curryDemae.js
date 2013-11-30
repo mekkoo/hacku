@@ -46,14 +46,14 @@ new funcs([
         console.log('＼出前の錬金術士！！／');   
 		console.log('出前館にログインするよ！',page.url);	
 		setTimeout(function() {
-            page.render('carryStep1.png');
+            page.render('curryStep1.png');
         }, 200);
 		page.open('https://demae-can.com/login/top/'); // 次ページヘ
 	},
 	function() {
 		console.log('ログイン画面にいったよ！',page.url);
        setTimeout(function() {
-            page.render('carryStep2.png');
+            page.render('curryStep2.png');
         }, 200);
 
        //ログイン
@@ -66,7 +66,7 @@ new funcs([
 	function() {
 		console.log('ログインに成功したよ！',page.url);
         setTimeout(function() {
-            page.render('carryStep3.png');
+            page.render('curryStep3.png');
         }, 200);
 
 		page.open('https://demae-can.com/search/genre/curry/');//チェーン選択の画面
@@ -75,7 +75,7 @@ new funcs([
 	function() {
 		console.log('カレーを食べるよ',page.url);
 		setTimeout(function() {
-            page.render('carryStep4.png');
+            page.render('curryStep4.png');
         }, 200);
 
 		page.open('https://demae-can.com/search/chain/301493/?addressId=1');//店舗選択画面 
@@ -84,7 +84,7 @@ new funcs([
 	function() {
 		console.log('情熱カレー禅六本木店のカレーにしたよ',page.url);
 		setTimeout(function() {
-            page.render('carryStep5.png');
+            page.render('curryStep5.png');
         }, 200);
         
 		//商品詳細画面を開き, バターチキンカレーを選択
@@ -115,7 +115,7 @@ new funcs([
         });
 
         setTimeout(function() {
-        	page.render('carryStep6.png');
+        	page.render('curryStep6.png');
        	}, 200);
      },
      function() {
@@ -151,7 +151,7 @@ new funcs([
         page.open("https://demae-can.com/order/cart/forward");
 
         setTimeout(function() {
-        	page.render('carryStep7.png');
+        	page.render('curryStep7.png');
        	}, 600);
 
      },
@@ -159,7 +159,7 @@ new funcs([
         console.log("注文画面へ", page.url);
 
         setTimeout(function() {
-        	page.render('carryStep8.png');
+        	page.render('curryStep8.png');
        	}, 200);
 
        	//phantom.jsを終了
