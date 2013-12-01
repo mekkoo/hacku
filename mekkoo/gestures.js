@@ -19,8 +19,31 @@ var namasuteFlag = false;
 var pizzaCnt = 0;
 var pizzaFlag = false;
 
+function showImage(food){
+	var gesture_text,demae_text;
+	switch(food){
+		case "sushi":
+			gesture_text = "にぎり";
+			demae_text = "寿司職人";
+			break;
+		case "pizza":
+			gesture_text = "生地まわし";
+			demae_text = "ピザ配達人";
+			break;
+		case "namasute":
+			gesture_text = "ナマステ";
+			demae_text = "インド人";
+			break;
+	}
+//	$("#back").addClass("back_"+food);
+	$("#img_container").append("<section id='show_img'><img src='"+ food +".gif' /><br><span class='desc'>"+gesture_text+"のポーズを検知！</span><p>"+demae_text+"が出撃しました！</p></section>").children("#show_img").fadeOut(5000);
+//	$("body").css("background-color","red");
+
+}
+
 //寿司注文関数
 function sushiAct(){
+	showImage("sushi");
 	Messenger().post({
 		message: "寿司が注文されました",
 		hideAfter: 2
@@ -29,6 +52,7 @@ function sushiAct(){
 
 //ピザ注文関数
 function pizzaAct(){
+	showImage("pizza");
 	Messenger().post({
 		message: "ピザが注文されました",
 		hideAfter: 2
@@ -36,6 +60,7 @@ function pizzaAct(){
 }
 
 function namasuteAct(){
+	showImage("namasute");
 	Messenger().post({
 		message: "インド人が注文されました",
 		hideAfter: 2
