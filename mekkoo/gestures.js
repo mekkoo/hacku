@@ -21,25 +21,40 @@ var pizzaFlag = false;
 
 //寿司注文関数
 function sushiAct(){
-	Messenger().post({
-		message: "寿司が注文されました",
-		hideAfter: 2
-	});
+	var result = confirm("寿司を注文しますか？");
+
+	if(result)
+	{
+		Messenger().post({
+			message: "寿司が注文されました",
+			hideAfter: 2
+		});
+	}
 }
 
 //ピザ注文関数
 function pizzaAct(){
-	Messenger().post({
-		message: "ピザが注文されました",
-		hideAfter: 2
-	});
+	var result = confirm("ピザを注文しますか？");
+
+	if(result)
+	{
+		Messenger().post({
+			message: "ピザが注文されました",
+			hideAfter: 2
+		});
+	}
 }
 
 function namasuteAct(){
-	Messenger().post({
-		message: "インド人が注文されました",
-		hideAfter: 2
-	});
+	var result = confirm("インド人を注文しますか？");
+
+	if(result)
+	{
+		Messenger().post({
+			message: "インド人が注文されました",
+			hideAfter: 2
+		});
+	}
 }
 
 //HTMLの#consoleにログを出力する用
@@ -126,7 +141,7 @@ controller.on('animationFrame', function(frame){
 			// 手のX座標が -40 <= X <= 40　に収まっている場合
 			if(parseInt(frame.hands[0].palmPosition[0]) >= (-40) && parseInt(frame.hands[0].palmPosition[0]) <= 40 && parseInt(frame.hands[0].palmPosition[1]) <= 200) {
 				// namasuteCntが100ならnamasuteAct関数を起動しCnt初期化。そうでないならnamasuteCntをインクリメント
-				if(namasuteCnt === 40) {
+				if(namasuteCnt === 60) {
 					namasuteAct();
 					namasuteCnt = 0;
 				}else {
