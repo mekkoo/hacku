@@ -53,7 +53,7 @@ function sushiAct(){
 			hideAfter: 2
 		});
 		setTimeout(function(){
-			document.location = "sushi_video.html";
+			document.location = "sushi_video_jw.html";
 		}, 5000);
 	}
 }
@@ -70,7 +70,7 @@ function pizzaAct(){
 			hideAfter: 2
 		});
 		setTimeout(function(){
-			document.location = "pizza_video.html";
+			document.location = "pizza_video_jw.html";
 		}, 5000);
 	}
 }
@@ -86,7 +86,7 @@ function namasuteAct(){
 			hideAfter: 2
 		});
 		setTimeout(function(){
-			document.location = "namasute_video.html";
+			document.location = "namasute_video_jw.html";
 		}, 5000);
 	}
 }
