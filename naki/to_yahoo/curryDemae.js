@@ -17,7 +17,7 @@ var funcs = [
     function() {
         console.log('ログイン画面にいったよ！',page.url);
        setTimeout(function() {
-            page.render('sushiStep2.png');
+            page.render('sushiStep1.png');
         }, 200);
 
        //ログイン
@@ -30,7 +30,7 @@ var funcs = [
  function() {
    console.log('ログインに成功したよ！',page.url);
         setTimeout(function() {
-            page.render('curryStep3.png');
+            page.render('curryStep2.png');
         }, 200);
 
    page.open('https://demae-can.com/search/genre/curry/');//チェーン選択の画面
@@ -39,7 +39,7 @@ var funcs = [
  function() {
    console.log('カレーを食べるよ',page.url);
    setTimeout(function() {
-            page.render('curryStep4.png');
+            page.render('curryStep3.png');
         }, 200);
 
    page.open('https://demae-can.com/search/chain/301493/?addressId=1');//店舗選択画面 
@@ -48,7 +48,7 @@ var funcs = [
  function() {
    console.log('情熱カレー禅六本木店のカレーにしたよ',page.url);
    setTimeout(function() {
-            page.render('curryStep5.png');
+            page.render('curryStep4.png');
         }, 200);
         
    //商品詳細画面を開き, バターチキンカレーを選択
@@ -79,7 +79,7 @@ var funcs = [
         });
 
         setTimeout(function() {
-         page.render('curryStep6.png');
+         page.render('curryStep5.png');
          }, 200);
      },
      function() {
@@ -107,7 +107,7 @@ var funcs = [
         });
 
         setTimeout(function() {
-            page.render('curryStep7.png');
+            page.render('curryStep6.png');
         }, 200);
 
      },
@@ -138,7 +138,7 @@ var funcs = [
         });
 
         setTimeout(function() {
-            page.render('curryStep8.png');
+            page.render('curryStep7.png');
         }, 200);
     },
     function() {
@@ -170,7 +170,7 @@ var funcs = [
         });
 
         setTimeout(function() {
-            page.render('curryStep9.png');
+            page.render('curryStep8.png');
         }, 200); 
 
         //キャプチャのため, TOPに遷移（がちな注文時は外す）

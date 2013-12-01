@@ -1,57 +1,21 @@
 var page = require('webpage').create();
-var fs   = require('fs');
 
 // *********************************
-// 出前館へのログインと注文（ピザ）
-// （注）ピザーラしか注文できない
+// 出前館へのログインと注文テスト（ピザ）
 // *********************************
 
-// ページが読み込まれたら page.onCallback を呼ぶ
-page.onInitialized = function() {
-    page.evaluate(function() {
-        document.addEventListener('DOMContentLoaded', function() {
-            window.callPhantom('DOMContentLoaded');
-        }, false);
-    });
-};
-
-// ページが読み込まれたら登録した関数の配列を順次実行してくれるクラス
-var funcs = function(funcs) {
-    this.funcs = funcs;
-    this.init();
-};
-funcs.prototype = {
-    // ページが読み込まれたら next() を呼ぶ
-    init: function() {
-        var self = this;
-        page.onCallback = function(data){
-            if (data === 'DOMContentLoaded') self.next();
-        }
-    },
-    // 登録した関数の配列から１個取り出して実行
-    next: function() {
-        var func = this.funcs.shift();
-        if (func !== undefined) {
-            func();
-        } else {
-            page.onCallback = function(){};
-        }
-    }
-};
-
-// 順次実行する関数
-new funcs([
+var funcs = [
 
     function() {
         console.log('＼出前の錬金術士！！／');   
         console.log('出前館にログインするよ！',page.url);   
-        setTimeout(function() {
-            page.render('pizzaStep1.png');
-        }, 200);
+
         page.open('https://demae-can.com/login/top/'); // 次ページヘ
+
     },
     function() {
         console.log('ログイン画面にいったよ！',page.url);
+
        setTimeout(function() {
             page.render('pizzaStep2.png');
         }, 200);
@@ -119,51 +83,111 @@ new funcs([
         }, 200);
      },
      function() {
-        
-        //テスト→これは動く
-        var test = page.evaluate(function() {
-            //var hoge = "テスト1";
-            //var btn = $('.cart_order_info > a').attr('id');
-            // return hoge;
-            //return btn;
-
-        });
-        console.log("ボタンのIDは", test);
+        console.log("カートにいれたよ！",page.url);
 
         // jsを実行
         page.evaluate(function() {
-            var btn = $('.cart_order_info > a').attr('id');
-            console.log("evalueteテスト", btn);
-            //カレーの個数を2個にする（1000円以上じゃないと頼めない）
-            //document.getElementById("ma_order_count").value="2";
-            // console.log("テスト1");
 
             // 対象ページ内でclick()を実装
+            HTMLElement.prototype.click = function() {
+                var ev = document.createEvent('MouseEvent');
+                ev.initMouseEvent(
+                    'click',
+                    /*bubble*/true, /*cancelable*/true,
+                    window, null,
+                    0, 0, 0, 0, /*coordinates*/
+                    false, false, false, false, /*modifier keys*/
+                    0/*button=left*/, null
+                );
+                this.dispatchEvent(ev);
+            };
 
-            //fix:動かない
-            //jQuery(配列)からHTMLElementを取り出すために[0]を使う
-            //$('#ma_order_next_link')[0].click();//注文へボタン
-            //$('.cart_order_info')[0].click(); 
-            //document.getElementById("ma_order_next_link").click();
+ 
+            $('#ma_order_next_link')[0].click();//注文へボタン
         });
-
-        //適当に遷移させる（functionを動かす）
-        page.open("https://demae-can.com/order/cart/forward");
 
         setTimeout(function() {
             page.render('pizzaStep7.png');
-        }, 600);
+        }, 1000);
 
      },
      function() {       
-        console.log("注文画面へ", page.url);
+        console.log("注文画面へいくよ！", page.url);
+        
+        // jsを実行し,ボタンをクリック
+        page.evaluate(function() {
+            HTMLElement.prototype.click = function() {
+                var ev = document.createEvent('MouseEvent');
+                ev.initMouseEvent(
+                    'click',
+                    /*bubble*/true, /*cancelable*/true,
+                    window, null,
+                    0, 0, 0, 0, /*coordinates*/
+                    false, false, false, false, /*modifier keys*/
+                    0/*button=left*/, null
+                );
+                this.dispatchEvent(ev);
+            };
+
+             $('#ma_next_link')[0].click();//次へボタン
+        });
 
         setTimeout(function() {
             page.render('pizzaStep8.png');
         }, 200);
+    },
+    function() {
+        //注文！！
+         console.log("注文！", page.url);
+        
+        // jsを実行し,ボタンをクリック
+        page.evaluate(function() {
+            document.getElementById("ma_password").value = "YahooJapan";
+
+            HTMLElement.prototype.click = function() {
+                var ev = document.createEvent('MouseEvent');
+                ev.initMouseEvent(
+                    'click',
+                    /*bubble*/true, /*cancelable*/true,
+                    window, null,
+                    0, 0, 0, 0, /*coordinates*/
+                    false, false, false, false, /*modifier keys*/
+                    0/*button=left*/, null
+                );
+                this.dispatchEvent(ev);
+            };
+
+            //パスワード入力
+            $('#ma_password').val('YahooJapan');
+
+            //注文されちゃう！！
+             //$('#ma_order_link')[0].click();//注文するボタン
+        });
+
+        setTimeout(function() {
+            page.render('pizzaStep9.png');
+        }, 200);
+
+        //キャプチャのため, TOPに遷移（がちな注文時は外す）
+        page.open('https://demae-can.com/');
+    },
+    function() {
 
         //phantom.jsを終了
         console.log("出前の錬金術士としての指名を全うした...");
         phantom.exit();
-     }    
-]).next();
+     } 
+];
+
+//phantomjsでページ遷移
+//参考：http://blog.p-rex.net/?eid=975503
+var recursive = function(i){
+  if(i < funcs.length){
+    page.onLoadFinished = function(){recursive(i+1);};
+    funcs[i]();
+  }else{
+    phantom.exit();
+  }
+};
+
+recursive(0);
