@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../jquery-1.10.2.min.js"></script>
+  </head>
   <body>
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
     <div id="player"></div>
@@ -22,8 +26,9 @@
           videoId: 'S7oxQlbf5Ns',
           playerVars: {
           	autohide: 1, //コントローラーを自動的に隠すかどうか 0:デフォルト 1:マウスアウトしている時は消す 2:常に表示
-        	controls: 1, //コントローラーを表示するかどうか 0:非表示 1:表示(デフォルト)
-          	rel: 0  	 //再生終了後に関連動画を表示するかどうか 0:非表示 1:表示(デフォルト)
+            controls: 1, //コントローラーを表示するかどうか 0:非表示 1:表示(デフォルト)
+          	rel: 0//,  	   //再生終了後に関連動画を表示するかどうか 0:非表示 1:表示(デフォルト)
+            // fs: 1        //フルスクリーンボタンを有効にするかどうか  0:非表示(デフォルト) 1:表示
           },
           events: {
             'onReady': onPlayerReady,
@@ -43,8 +48,10 @@
       // var done = false;
       function onPlayerStateChange(event) {
       	if (event.data == YT.PlayerState.ENDED) {
-        	console.log("stop!");
-			document.location = "/Users/sudakentarou/hacku/mekkoo/gestures.html";
+        	console.log("stop!"); 
+          setTimeout(function(){
+            document.location = "/Users/sudakentarou/hacku/mekkoo/gestures.html";
+          }, 1000);
         }
         // if (event.data == YT.PlayerState.PLAYING && !done) {
         //   setTimeout(stopVideo, 6000);
